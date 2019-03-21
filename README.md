@@ -1,4 +1,5 @@
 # CMPUT 402 Final Project
+## Members
 #### Matthew Chung, Hiu Fung Kevin Chang, Henry Truong
 
 ## Goal:
