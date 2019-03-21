@@ -12,7 +12,7 @@ To conduct this experiment, we will be sampling repositories from TravisTorrent 
 
 An example of how we might evaluate repositories is detailed below: 
 
-| PR Has Tests  | # of added tests | contr. test Cov | Merged Status |
+| PR has tests  | Number of added tests | Contributed test coverage | Merge status |
 | ------------- | ---------------- | --------------- | ------------- |
 |       T       |        3         |        50%      |       T       |
 |       F       |        5         |        20%      |       F       |
