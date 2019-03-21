@@ -1,4 +1,5 @@
-# Project Proposal
+# CMPUT 402 Final Project
+#### Matthew Chung, Hiu Fung Kevin Chang, Henry Truong
 
 ## Goal:
 The problem we are addressing is whether or not number of tests leads to more merges into production code.
