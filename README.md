@@ -8,7 +8,7 @@ The problem we are addressing is whether or not number of tests leads to more me
 ## Method:
 Determine if there is a relationship between certain attributes of continuous integration and project builds and release cycles. Some of the attributes we are looking at are the following: Frequency and distribution of how often tests fail, how many tests are run per build, how much test code is added between builds and what is the average amount of test code added. 
 
-We predict that tests suites evolve in size over time in order to increase successful PR merges and successful releases and whether or not adding tests and thus increasing or maintaining coverage is an attribute for successful PRs.
+We predict that tests suites evolve in size over time in order to increase successful PR merges and successful releases. We aim to see whether or not adding tests and thus increasing or maintaining coverage is an attribute for successful PRs.
 
 To conduct this experiment, we will be sampling repositories from TravisTorrent and using github mining tools. Our sampling strategy is to select the first 30-50 unique github repositories in the dataset. We will then use PyDriller (maybe) to mine the repositories to discover any patterns and combine it with the attributes of interest from the dataset.
 
