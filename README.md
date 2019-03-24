@@ -3,7 +3,7 @@
 #### Matthew Chung, Hiu Fung Kevin Chang, Henry Truong
 
 ## Goal:
-The problem we are addressing is whether or not number of tests leads to more merges into production code.
+The question we are addressing is; **Do number of tests correlate with more merges into production code**
 
 ## Method:
 Determine if there is a relationship between certain attributes of continuous integration and project builds and release cycles. Some of the attributes we are looking at are the following: Frequency and distribution of how often tests fail, how many tests are run per build, how much test code is added between builds and what is the average amount of test code added. 
