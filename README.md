@@ -42,3 +42,14 @@ Beller, M., Gousios, G., & Zaidman, A. (2017). TravisTorrent: Synthesizing Travi
 
 Vasilescu, B., Yu, Y., Wang, H., Devanbu, P., & Filkov, V. (2015). Quality and productivity outcomes relating to continuous integration in GitHub. In Proceedings of the 2015 10th Joint Meeting on Foundations of Software Engineering - ESEC/FSE 2015. ACM Press. https://doi.org/10.1145/2786805.2786850
 
+
+## Libraries
+
+### PyDriller
+
+Installation instructions can be found here: https://github.com/ishepard/pydriller#install  
+```
+pip3 install pydriller
+```
+
+
