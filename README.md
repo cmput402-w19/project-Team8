@@ -53,3 +53,15 @@ pip3 install pydriller
 ```
 
 
+### TravisTorrent
+Using sqlite3 to query this, download the latest csv from here: https://travistorrent.testroots.org/page_access/
+
+Import to sqlite3 using:  
+```
+sqlite3 travis.db
+.mode csv
+.import path/to/travisTorrent.csv travis
+```
+Now there will be a a table called travis in your new travis.db containing all the data; takes about 5-10 minutes to complete the import.  
+
+
