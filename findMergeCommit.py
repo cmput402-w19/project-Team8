@@ -15,8 +15,11 @@ repositoryLink: The https url to the git repository you are mining
 def get_pull_request_info(repo, pr_num):
     output = {}
     pr_endpoint = "https://api.github.com/repos/{}/pulls/{}/commits".format(repo, pr_num)
-    response = requests.get(pr_endpoint)
+    github_oauth_token = "0bb120e003a9efee0ca1e502026ea29cebe191ee"
+    headers={"Authorization":"token " + github_oauth_token}
+    response = requests.get(pr_endpoint, headers=headers)
     json_response = response.json()
+    print(response.headers)
     # commit before this pr branch off the original branch
     output["parent_commit"] = json_response[0]["parents"][0]["sha"]
     output["oldest_commit_in_pr"] = json_response[0]["sha"]
@@ -30,6 +33,7 @@ def get_pull_request_info(repo, pr_num):
         files_changed.append(file_obj["filename"])
     
     output["files_changed"] = files_changed
+    print(output)
     return output
 
 def test_density_comparison(cur, merge_commit, before_commit, project): 
@@ -74,6 +78,7 @@ def main():
             print("Looking at PR: " + str(pr))
             pr_num = int(pr)
             output = get_pull_request_info(repo_name, pr_num)
+            exit(1)
             test_density_comparison(cur, output["latest_commit_in_pr"], output["parent_commit"], repo_name)
         # When we are confident that our oauth is setup we can remove this break. Leaving it so we dont get banned
         break
