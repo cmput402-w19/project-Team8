@@ -19,7 +19,6 @@ def get_pull_request_info(repo, pr_num):
     headers={"Authorization":"token " + github_oauth_token}
     response = requests.get(pr_endpoint, headers=headers)
     json_response = response.json()
-    print(response.headers)
     # commit before this pr branch off the original branch
     output["parent_commit"] = json_response[0]["parents"][0]["sha"]
     output["oldest_commit_in_pr"] = json_response[0]["sha"]
@@ -33,7 +32,6 @@ def get_pull_request_info(repo, pr_num):
         files_changed.append(file_obj["filename"])
     
     output["files_changed"] = files_changed
-    print(output)
     return output
 
 def test_density_comparison(cur, merge_commit, before_commit, project): 
