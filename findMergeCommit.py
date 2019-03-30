@@ -2,6 +2,7 @@ from pydriller import RepositoryMining
 import sqlite3
 import requests
 import json
+import csv
 
 ''' 
 searchSHA: String of the commit hash that you are looking for (this should be a PR)
@@ -73,6 +74,15 @@ def special_subtraction(strAfter, strBefore):
         return "NULL"
     return str(val)
 
+def write_repo_result(results):
+    result_file = "./results/test_density_export/{}".format(results[0][0].split("/")[-1])
+    with open(result_file, "w") as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        headers = ["RepoName", "PrNumber", "Before Line Density", "After Line Density", "Line Density Difference", "Before Test Case Density", "After Test Case Density", "Test Case Difference", "Assert Test Cases Before", "Assert Test Cases After", "Test Cases Difference", "Before Num Tests Run", "After Num Tests Run", "Num Tests Run Difference", "Before Num Tests Pass", "After Num Tests Pass", "Num Tests Pass Difference", "Before Num Tests Failed", "After Num Tests Failed", "Num Tests Failed Difference"]
+        csv_writer.writerow(headers)
+        for result_row in results:
+            csv_writer.writerow(result_row)
+
 def main():
     con = sqlite3.connect('travis.db')  
     cur = con.cursor()
@@ -106,7 +116,7 @@ def main():
                 # Without this break diaspora PR 3402 repeats four times?
                 break
             if len(results_array) >= 30:
-                print(results_array)
+                write_repo_result(results_array)
                 break
         break
         pass
