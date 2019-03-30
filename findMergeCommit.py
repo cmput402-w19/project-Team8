@@ -52,7 +52,7 @@ def test_density_comparison(cur, merge_commit, before_commit, project):
     return results
 
 def get_repo_names(cur):
-    query = """select distinct  gh_project_name from travis where (gh_is_pr == "TRUE") LIMIT 100;"""
+    query = """select distinct  gh_project_name from travis where (gh_is_pr == "TRUE") LIMIT 50;"""
     results = cur.execute(query)
     repos = []
     for row in results:
@@ -118,9 +118,8 @@ def main():
                 break
             if len(results_array) >= 30:
                 write_repo_result(results_array)
-                #break
-        break
-        pass
+                break
+        # break
     return 
 
 if __name__ == "__main__":
