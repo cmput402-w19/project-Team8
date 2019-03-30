@@ -38,7 +38,8 @@ def test_density_comparison(cur, merge_commit, before_commit, project):
     query = """
                 SELECT DISTINCT t1.gh_test_lines_per_kloc, t2.gh_test_lines_per_kloc, t1.gh_test_cases_per_kloc, t2.gh_test_cases_per_kloc,
                 t1.gh_asserts_cases_per_kloc, t2.gh_asserts_cases_per_kloc, t1.tr_log_num_tests_run, t2.tr_log_num_tests_run, 
-                t1.tr_log_num_tests_ok, t2.tr_log_num_tests_ok, t1.tr_log_num_tests_failed, t2.tr_log_num_tests_failed
+                t1.tr_log_num_tests_ok, t2.tr_log_num_tests_ok, t1.tr_log_num_tests_failed, t2.tr_log_num_tests_failed,
+                t2.git_merged_with
                 FROM travis t1, travis t2 
                 WHERE t1.git_trigger_commit == ? 
                 AND t2.git_trigger_commit == ? 
@@ -78,7 +79,7 @@ def write_repo_result(results):
     result_file = "./results/test_density_export/{}".format(results[0][0].split("/")[-1])
     with open(result_file, "w") as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        headers = ["RepoName", "PrNumber", "Before Line Density", "After Line Density", "Line Density Difference", "Before Test Case Density", "After Test Case Density", "Test Case Difference", "Assert Test Cases Before", "Assert Test Cases After", "Test Cases Difference", "Before Num Tests Run", "After Num Tests Run", "Num Tests Run Difference", "Before Num Tests Pass", "After Num Tests Pass", "Num Tests Pass Difference", "Before Num Tests Failed", "After Num Tests Failed", "Num Tests Failed Difference"]
+        headers = ["RepoName", "PrNumber", "Before Line Density", "After Line Density", "Line Density Difference", "Before Test Case Density", "After Test Case Density", "Test Case Difference", "Assert Test Cases Before", "Assert Test Cases After", "Test Cases Difference", "Before Num Tests Run", "After Num Tests Run", "Num Tests Run Difference", "Before Num Tests Pass", "After Num Tests Pass", "Num Tests Pass Difference", "Before Num Tests Failed", "After Num Tests Failed", "Num Tests Failed Difference", "PR Merged With"]
         csv_writer.writerow(headers)
         for result_row in results:
             csv_writer.writerow(result_row)
@@ -108,7 +109,7 @@ def main():
                 diff_tests_okay = special_subtraction(row[9], row[8])
                 diff_tests_failed = special_subtraction(row[11], row[10])
 
-                results_array.append([repo_name, pr_num, str(row[0]), str(row[1]), diff_line, str(row[2]), str(row[3]), diff_case, str(row[4]), str(row[5]), diff_assert, str(row[6]), str(row[7]), diff_tests_run, str(row[8]), str(row[9]), diff_tests_okay, str(row[10]), str(row[11]), diff_tests_failed])
+                results_array.append([repo_name, pr_num, str(row[0]), str(row[1]), diff_line, str(row[2]), str(row[3]), diff_case, str(row[4]), str(row[5]), diff_assert, str(row[6]), str(row[7]), diff_tests_run, str(row[8]), str(row[9]), diff_tests_okay, str(row[10]), str(row[11]), diff_tests_failed, str(row[12])])
                 # Before Line Density = row[0] After Line Density = row[1] Before Case Density = row[2] After Case Density = row[3]
                 # Asserts Cases Before = row[4] Asserts Cases After = row[5] Before Num Tests Run = row[6] After Num Test Run = row[7]
                 # Num Tests Okay Before = row[8] Num Tests Okay After = row[9] 
@@ -117,7 +118,7 @@ def main():
                 break
             if len(results_array) >= 30:
                 write_repo_result(results_array)
-                break
+                #break
         break
         pass
     return 
