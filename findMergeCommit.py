@@ -74,8 +74,9 @@ def test_density_comparison(cur, merge_commit, before_commit, project):
 # Queried over all repos with the highest counts of unknown or blank git_merged_with value
 # Grabbed the 30 repos that have the highest amount of REAL rejected PRs which was verified using the github API
 def get_repo_names():
-    # Took out 'spring-projects/spring-data-examples' because its actually not helpful, only 29 below need 1 more
-    repos = ['Shopify/identity_cache', 'zendesk/samson', 'rspec/rspec-mocks', 'chef/omnibus', 'geoserver/geoserver', 'projectblacklight/blacklight', 'activeadmin/activeadmin', 'heroku/heroku-buildpack-ruby', 'datastax/java-driver', 'querydsl/querydsl', 'HubSpot/Singularity', 'perfectsense/brightspot-cms', 'hw-cookbooks/graphite', 'thoughtbot/shoulda-matchers', 'travis-ci/travis-core', 'prawnpdf/prawn', 'opal/opal', 'expertiza/expertiza', 'test-kitchen/test-kitchen', 'owncloud/android', 'rackerlabs/blueflood', 'adhearsion/adhearsion', 'Shopify/liquid', 'jnicklas/capybara', 'MagLev/maglev', 'rspec/rspec-core', 'celluloid/celluloid', 'heroku/heroku', 'sanemat/tachikoma']
+    # Took out 'spring-projects/spring-data-examples' and 'brightspot' because its actually not helpful, 
+    # # added picasso and jedis 
+    repos = ['square/picasso', 'xetorthio/jedis', 'Shopify/identity_cache', 'zendesk/samson', 'rspec/rspec-mocks', 'chef/omnibus', 'geoserver/geoserver', 'projectblacklight/blacklight', 'activeadmin/activeadmin', 'heroku/heroku-buildpack-ruby', 'datastax/java-driver', 'querydsl/querydsl', 'HubSpot/Singularity', 'hw-cookbooks/graphite', 'thoughtbot/shoulda-matchers', 'travis-ci/travis-core', 'prawnpdf/prawn', 'opal/opal', 'expertiza/expertiza', 'test-kitchen/test-kitchen', 'owncloud/android', 'rackerlabs/blueflood', 'adhearsion/adhearsion', 'Shopify/liquid', 'jnicklas/capybara', 'MagLev/maglev', 'rspec/rspec-core', 'celluloid/celluloid', 'heroku/heroku', 'sanemat/tachikoma']
     return repos
 
 def get_success_prs(cur, project): 
