@@ -130,7 +130,17 @@ def get_commit_before_first_changes_requested(repo, pr_num):
             return review["commit_id"]
     return None
 
-def main3():
+def get_commit_before_review(repo, pr_num):
+    endpoint = "https://api.github.com/repos/{}/pulls/{}/comments".format(repo, pr_num)
+    github_oauth_token = "0bb120e003a9efee0ca1e502026ea29cebe191ee"
+    headers={"Authorization":"token " + github_oauth_token}
+    response = requests.get(endpoint, headers=headers)
+    try:
+        return response.json()[0]["original_commit_id"]   
+    except:
+        return None
+
+def main():
     con = sqlite3.connect('travis.db')  
     cur = con.cursor()
     repo_names = get_repo_names()
@@ -183,6 +193,7 @@ def main3():
             pr_num = int(pr)
 
             change_req_commit = get_commit_before_first_changes_requested(repo_name, pr_num)
+            review_commit = get_commit_before_review(repo_name, pr_num)
 
             # If there is a change request in this PR
             if (change_req_commit and len(failed_results_array) < 15):
@@ -200,6 +211,23 @@ def main3():
                         diff_tests_failed = special_subtraction(row[11], row[10])
 
                         failed_results_array.append([repo_name, pr_num, str(row[0]), str(row[1]), diff_line, str(row[2]), str(row[3]), diff_case, str(row[4]), str(row[5]), diff_assert, str(row[6]), str(row[7]), diff_tests_run, str(row[8]), str(row[9]), diff_tests_okay, str(row[10]), str(row[11]), diff_tests_failed, "Change_Request"])
+                        break
+            # If there is a review in this PR
+            elif (review_commit and len(failed_results_array) < 15):
+                output = get_pull_request_info(repo_name, pr_num)
+                if (output):
+                    results = test_density_comparison(cur, output["latest_commit_in_pr"], review_commit, repo_name)
+                    for row in results:
+                        print("Review PR")
+
+                        diff_line = special_subtraction(row[1], row[0])
+                        diff_case = special_subtraction(row[3], row[2])
+                        diff_assert = special_subtraction(row[5], row[4])
+                        diff_tests_run = special_subtraction(row[7], row[6])
+                        diff_tests_okay = special_subtraction(row[9], row[8])
+                        diff_tests_failed = special_subtraction(row[11], row[10])
+
+                        failed_results_array.append([repo_name, pr_num, str(row[0]), str(row[1]), diff_line, str(row[2]), str(row[3]), diff_case, str(row[4]), str(row[5]), diff_assert, str(row[6]), str(row[7]), diff_tests_run, str(row[8]), str(row[9]), diff_tests_okay, str(row[10]), str(row[11]), diff_tests_failed, "Review"])
                         break
             # If this is a merged PR with no change requests
             elif (not(change_req_commit) and len(success_results_array) < 15):
@@ -225,4 +253,4 @@ def main3():
     return 
 
 if __name__ == "__main__":
-    main3()
+    main()
