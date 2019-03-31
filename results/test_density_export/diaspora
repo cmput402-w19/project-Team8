@@ -1,4 +1,0 @@
-RepoName,PrNumber,Before Line Density,After Line Density,Line Density Difference,Before Test Case Density,After Test Case Density,Test Case Difference,Assert Test Cases Before,Assert Test Cases After,Test Cases Difference,Before Num Tests Run,After Num Tests Run,Num Tests Run Difference,Before Num Tests Pass,After Num Tests Pass,Num Tests Pass Difference,Before Num Tests Failed,After Num Tests Failed,Num Tests Failed Difference
-diaspora/diaspora,3402,639.277626154114,639.277626154114,0.0,73.9794437024563,73.9794437024563,0.0,100.226467684803,100.226467684803,0.0,,,NULL,,,NULL,,,NULL
-diaspora/diaspora,3401,639.277626154114,638.906621786315,-0.37100436779905976,73.9794437024563,73.9365097788869,-0.04293392356939307,100.226467684803,100.168301317393,-0.0581663674099957,,,NULL,,,NULL,,,NULL
-diaspora/diaspora,3399,638.906621786315,638.906621786315,0.0,73.9365097788869,73.9365097788869,0.0,100.168301317393,100.168301317393,0.0,2076,,NULL,2076,,NULL,0,,NULL
