@@ -24,12 +24,12 @@ def get_pull_request_info(repo, pr_num):
         output["oldest_commit_in_pr"] = json_response[0]["sha"]
         output["latest_commit_in_pr"] = json_response[-1]["sha"]
 
-        files_changed_endpoint = "https://api.github.com/repos/{}/pulls/{}/files".format(repo, pr_num)
         files_changed = []
-        response = requests.get(files_changed_endpoint, headers=headers)
-        for file_obj in response.json():
-            # does status: added, modified, deleted matter?
-            files_changed.append(file_obj["filename"])
+        # files_changed_endpoint = "https://api.github.com/repos/{}/pulls/{}/files".format(repo, pr_num)
+        # response = requests.get(files_changed_endpoint, headers=headers)
+        # for file_obj in response.json():
+        #     # does status: added, modified, deleted matter?
+        #     files_changed.append(file_obj["filename"])
         
         output["files_changed"] = files_changed
         return output
@@ -74,11 +74,12 @@ def test_density_comparison(cur, merge_commit, before_commit, project):
 # Queried over all repos with the highest counts of unknown or blank git_merged_with value
 # Grabbed the 30 repos that have the highest amount of REAL rejected PRs which was verified using the github API
 def get_repo_names():
-    repos = ['Shopify/identity_cache', 'zendesk/samson', 'rspec/rspec-mocks', 'chef/omnibus', 'spring-projects/spring-data-examples', 'geoserver/geoserver', 'projectblacklight/blacklight', 'activeadmin/activeadmin', 'heroku/heroku-buildpack-ruby', 'datastax/java-driver', 'querydsl/querydsl', 'HubSpot/Singularity', 'perfectsense/brightspot-cms', 'hw-cookbooks/graphite', 'thoughtbot/shoulda-matchers', 'travis-ci/travis-core', 'prawnpdf/prawn', 'opal/opal', 'expertiza/expertiza', 'test-kitchen/test-kitchen', 'owncloud/android', 'rackerlabs/blueflood', 'adhearsion/adhearsion', 'Shopify/liquid', 'jnicklas/capybara', 'MagLev/maglev', 'rspec/rspec-core', 'celluloid/celluloid', 'heroku/heroku', 'sanemat/tachikoma']
+    # Took out 'spring-projects/spring-data-examples' because its actually not helpful, only 29 below need 1 more
+    repos = ['Shopify/identity_cache', 'zendesk/samson', 'rspec/rspec-mocks', 'chef/omnibus', 'geoserver/geoserver', 'projectblacklight/blacklight', 'activeadmin/activeadmin', 'heroku/heroku-buildpack-ruby', 'datastax/java-driver', 'querydsl/querydsl', 'HubSpot/Singularity', 'perfectsense/brightspot-cms', 'hw-cookbooks/graphite', 'thoughtbot/shoulda-matchers', 'travis-ci/travis-core', 'prawnpdf/prawn', 'opal/opal', 'expertiza/expertiza', 'test-kitchen/test-kitchen', 'owncloud/android', 'rackerlabs/blueflood', 'adhearsion/adhearsion', 'Shopify/liquid', 'jnicklas/capybara', 'MagLev/maglev', 'rspec/rspec-core', 'celluloid/celluloid', 'heroku/heroku', 'sanemat/tachikoma']
     return repos
 
 def get_success_prs(cur, project): 
-    query = """SELECT DISTINCT gh_pull_req_num FROM travis WHERE git_merged_with = 'merge_button' AND gh_is_pr = "TRUE" AND gh_project_name = ? LIMIT 100;"""
+    query = """SELECT DISTINCT gh_pull_req_num FROM travis WHERE (git_merged_with = 'merge_button' OR git_merged_with = 'commits_in_master') AND gh_is_pr = "TRUE" AND gh_project_name = ? ORDER BY git_merged_with DESC;"""
     merged_results = cur.execute(query, (project,))
     pr_list = []
     for row in merged_results:
@@ -86,7 +87,7 @@ def get_success_prs(cur, project):
     return pr_list
 
 def get_failed_prs(cur, project): 
-    query = """SELECT DISTINCT gh_pull_req_num FROM travis WHERE git_merged_with = 'unknown' AND gh_is_pr = "TRUE" AND gh_project_name = ?;"""
+    query = """SELECT DISTINCT gh_pull_req_num FROM travis WHERE (git_merged_with = 'unknown' OR git_merged_with = 'fixes_in_commit' OR git_merged_with = '') AND gh_is_pr = "TRUE" AND gh_project_name = ? ORDER BY git_merged_with DESC;"""
     unknown_results = cur.execute(query, (project,))
     pr_list = []
     for row in unknown_results:
@@ -104,7 +105,7 @@ def write_repo_result(results):
     result_file = "./results/test_density_export/{}.csv".format(results[0][0].split("/")[-1])
     with open(result_file, "w") as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        headers = ["RepoName", "PrNumber", "Before Line Density", "After Line Density", "Line Density Difference", "Before Test Case Density", "After Test Case Density", "Test Case Difference", "Assert Test Cases Before", "Assert Test Cases After", "Test Cases Difference", "Before Num Tests Run", "After Num Tests Run", "Num Tests Run Difference", "Before Num Tests Pass", "After Num Tests Pass", "Num Tests Pass Difference", "Before Num Tests Failed", "After Num Tests Failed", "Num Tests Failed Difference", "PR Merged With"]
+        headers = ["RepoName", "PrNumber", "Before Line Density", "After Line Density", "Line Density Difference", "Before Test Case Density", "After Test Case Density", "Test Case Density Difference", "Assert Test Cases Before", "Assert Test Cases After", "Assert Test Cases Difference", "Before Num Tests Run", "After Num Tests Run", "Num Tests Run Difference", "Before Num Tests Pass", "After Num Tests Pass", "Num Tests Pass Difference", "Before Num Tests Failed", "After Num Tests Failed", "Num Tests Failed Difference", "PR Merged With"]        
         csv_writer.writerow(headers)
         for result_row in results:
             csv_writer.writerow(result_row)
@@ -145,9 +146,11 @@ def main():
     cur = con.cursor()
     repo_names = get_repo_names()
     for repo_name in repo_names:
-
+        writeFlag = False
         # Failed PR Analysis
         repo_failed_prs = get_failed_prs(cur, repo_name)
+        print("Failed PRs" + str(repo_failed_prs))
+
         print("Analyzing: " + repo_name)
         failed_results_array = list()
         failed_count = 0
@@ -185,12 +188,14 @@ def main():
         # Success and Change Request Analysis
         success_results_array = list()
         repo_success_prs = get_success_prs(cur, repo_name)
+        print("Success PRs" + str(repo_success_prs))
         print("Analyzing: " + repo_name)
         success_count = 0
         for pr in repo_success_prs:
             success_count += 1
             print("Looking at PR: " + str(pr) + " Iteration: " + str(success_count))
             pr_num = int(pr)
+            
 
             change_req_commit = get_commit_before_first_changes_requested(repo_name, pr_num)
             review_commit = get_commit_before_review(repo_name, pr_num)
@@ -228,6 +233,8 @@ def main():
                         diff_tests_failed = special_subtraction(row[11], row[10])
 
                         failed_results_array.append([repo_name, pr_num, str(row[0]), str(row[1]), diff_line, str(row[2]), str(row[3]), diff_case, str(row[4]), str(row[5]), diff_assert, str(row[6]), str(row[7]), diff_tests_run, str(row[8]), str(row[9]), diff_tests_okay, str(row[10]), str(row[11]), diff_tests_failed, "Review"])
+                        print("Success: ", len(success_results_array))
+                        print("Fail: ", len(failed_results_array))
                         break
             # If this is a merged PR with no change requests
             elif (not(change_req_commit) and len(success_results_array) < 15):
@@ -245,11 +252,18 @@ def main():
                         diff_tests_failed = special_subtraction(row[11], row[10])
 
                         success_results_array.append([repo_name, pr_num, str(row[0]), str(row[1]), diff_line, str(row[2]), str(row[3]), diff_case, str(row[4]), str(row[5]), diff_assert, str(row[6]), str(row[7]), diff_tests_run, str(row[8]), str(row[9]), diff_tests_okay, str(row[10]), str(row[11]), diff_tests_failed, "Merged"])
+                        print("Success: ", len(success_results_array))
+                        print("Fail: ", len(failed_results_array))
                         break
             if (len(success_results_array) >= 15 and len(failed_results_array) >= 15):
                 print("Found 30")
                 write_repo_result(success_results_array + failed_results_array)
+                writeFlag = True
                 break
+        # If we check all the data and still dont get 30 total valid PRs, write to file anyways
+        if writeFlag == False:
+            write_repo_result(success_results_array + failed_results_array)
+
     return 
 
 if __name__ == "__main__":
