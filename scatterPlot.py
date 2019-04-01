@@ -60,19 +60,17 @@ def prep_csv_data(csv_files):
     for data, color, group in zip(data, colors, groups):
         header = group
         x, y = data
-        ax.scatter(x, y, alpha=0.8, c=color, edgecolors="none", label=group)         
-
-    # x, y = data
-    # ax.scatter(x, y, alpha=0.8, c=red, edgecolors="none", label="merged")    
+        ax.scatter(x, y, alpha=0.8, c=color, edgecolors="none", label=group)          
 
     x = np.linspace(min(min(unmerged_prs_x), min(merged_prs_x)), max(max(unmerged_prs_x), max(merged_prs_x)), 100)
     y = 0*x
     x2 = 0*y
     y2 = np.linspace(min(min(unmerged_prs_y), min(merged_prs_y)), max(max(unmerged_prs_y), max(merged_prs_y)), 100)
-    print(merged_counts, "merged counts in quad1\n")
-    print(unmerged_counts_above, "unmerged commits in quad1\n")
+    
+    print(merged_counts, "merged counts in quad1")
+    print(unmerged_counts_above, "unmerged commits in quad1")
     print(merged_counts_below, "merge commits in quad 3")
-    print(unmerged_counts, "unmerged counts in quad 3")
+    print(unmerged_counts, "unmerged counts in quad 3\n")
     print(counter, "total rows")
 
 
@@ -82,8 +80,7 @@ def prep_csv_data(csv_files):
 
     plt.xlabel("test case density diff")
     plt.ylabel("assert test case diff")
-    plt.show()
-    plt.savefig("./scatter.png")
+    plt.savefig("./results/plots/overall_scatter_plot.png")
     plt.close()
     
 def scatter_plot_repo(csv_files):
@@ -126,20 +123,16 @@ def scatter_plot_repo(csv_files):
         plt.xlabel("test case density diff")
         plt.ylabel("assert test case diff")
 
-        plt.show()
-        plt.savefig("./scatter.png")
+        fileName = csv_file.replace(".csv","")
+
+        plt.savefig("./results/plots/{}_scatterplot.png".format(fileName))
         plt.close()
 
 
 def main():
-    # for csv_file in csv_files:
-    # csv_files = ["activeadmin.csv", "android.csv", "blueflood.csv", "brightspot-cms.csv", "expertiza.csv",
-    #     "heroku-buildpack-ruby.csv", "identity_cache.csv", "liquid.csv", "querydsl.csv",
-    #     "rspec-core.csv", "rspec-mocks.csv", "samson.csv", "Singularity.csv", "travis-core.csv"]
     csv_path = "./results/test_density_export/"
     csv_files = []
     for filename in  os.listdir(csv_path):
         csv_files.append(csv_path+filename)
     prep_csv_data(csv_files)
-    # scatter_plot_repo(csv_files)
 main()
