@@ -67,20 +67,26 @@ def prep_csv_data(csv_files):
     x2 = 0*y
     y2 = np.linspace(min(min(unmerged_prs_y), min(merged_prs_y)), max(max(unmerged_prs_y), max(merged_prs_y)), 100)
     
-    print(merged_counts, "merged counts in quad1")
-    print(unmerged_counts_above, "unmerged commits in quad1")
+    print(merged_counts, "merged counts in quad 1")
+    print(unmerged_counts_above, "unmerged commits in quad 1")
     print(merged_counts_below, "merge commits in quad 3")
     print(unmerged_counts, "unmerged counts in quad 3\n")
     print(counter, "total rows")
 
 
-    plt.title("title")
+    plt.title("Scatterplot of All PRs")
     plt.plot(x, y, "-b")
     plt.plot(x2, y2, "-b")
 
     plt.xlabel("test case density diff")
     plt.ylabel("assert test case diff")
     plt.savefig("./results/plots/overall_scatter_plot.png")
+
+    plt.title("Focused Scatterplot of All PRs")
+    plt.xlim(-5, 8)
+    plt.ylim(-9, 13)
+    # plt.show()
+    plt.savefig("./results/plots/focused_overall_scatter_plot.png")
     plt.close()
     
 def scatter_plot_repo(csv_files):
