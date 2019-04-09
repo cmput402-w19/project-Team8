@@ -1,9 +1,9 @@
-# CMPUT 402 Final Project
+# CMPUT 402 Final Project Replication Instructions
 ## Members
 #### Matthew Chung, Hiu Fung Kevin Chang, Henry Truong
 
 ## Goal:
-The question we are addressing is; **'Do number of tests correlate with more merges into production code'**
+The question this project aims to address is; **'Do number of tests correlate with more merges into production code'**
 
 ## Method:
 To conduct this experiment, we will be sampling repositories from TravisTorrent and using github mining tools. Our sampling strategy is to select the first 30-50 unique github repositories in the dataset. We will then use PyDriller (maybe) to mine the repositories to discover any patterns and combine it with the attributes of interest from the dataset.
