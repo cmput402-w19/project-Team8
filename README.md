@@ -18,7 +18,7 @@ To conduct this experiment, we sample repositories from TravisTorrent and use gi
 
 All of our required libraries for python can be installed using 
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 #### TravisTorrent
@@ -33,6 +33,8 @@ sqlite3 travis.db
 Now there will be a a table called travis in your new travis.db containing all the data; takes about 5-10 minutes to complete the import.  
 
 ### Instructions 
+
+### Raw Data
 You *must* have the results/test_density_export folder to collect the exported data.
 
 Run
@@ -42,3 +44,12 @@ python3 findMergeCommit.py
 This will take several hours to complete, it will generate in the `results/test_density_export` folder a unique csv file for each repository analyzed. This csv file will contain all of the pull request data of interest and will look something like this:
 
 *insert image here*
+
+### Scatterplots
+You *must* have the results/plots folder to collect the exported plots.
+
+Run
+```
+python3 scatterPlot.py
+```
+The resulting plots will be saved in the results/plots folder
