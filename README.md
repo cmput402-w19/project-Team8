@@ -50,6 +50,12 @@ You *must* have the results/plots folder to collect the exported plots.
 
 Run
 ```
-python3 scatterPlot.py
+python3 scatterPlot.py 
 ```
-The resulting plots will be saved in the results/plots folder
+There are three plots which will be generated in the results/plots folder;
+
+overall_scatter_plot.png: This plot shows all of our data, with Assert Density on the Y-Axis and Test Case Density on the X-Axis. It contains all 861 Pull requests and plots the *difference* in their respective x and y axis values from before the PR and the end of the PR.
+
+focused_overall_scatter_plot.png: This plot is similar to the one above and shows all of our data, with Assert Density on the Y-Axis and Test Case Density on the X-Axis, however it excludes some of the egregious outliers so that we can better see the distribution of data
+
+type3_scatter_plot.png: This plot shows the data for the 10 repositories we found to have *explicit* reference to a contribution policy that referenced tests as being necessary for PRs
