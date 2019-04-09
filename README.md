@@ -14,11 +14,11 @@ To conduct this experiment, we sample repositories from TravisTorrent and use gi
 
 ### Libraries
 
-#### PyDriller
+#### Python3
 
-Installation instructions can be found here: https://github.com/ishepard/pydriller#install  
+All of our required libraries for python can be installed using 
 ```
-pip3 install pydriller
+pip install -r requirements.txt
 ```
 
 #### TravisTorrent
