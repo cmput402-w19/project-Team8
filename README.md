@@ -1,58 +1,30 @@
-# CMPUT 402 Final Project
+# CMPUT 402 Final Project Replication Instructions
 ## Members
 #### Matthew Chung, Hiu Fung Kevin Chang, Henry Truong
 
 ## Goal:
-The question we are addressing is; **'Do number of tests correlate with more merges into production code'**
+The question this project aims to address is; 
+
+**'Do number of tests correlate with more merges into production code'**
 
 ## Method:
-To conduct this experiment, we will be sampling repositories from TravisTorrent and using github mining tools. Our sampling strategy is to select the first 30-50 unique github repositories in the dataset. We will then use PyDriller (maybe) to mine the repositories to discover any patterns and combine it with the attributes of interest from the dataset.
+To conduct this experiment, we sample repositories from TravisTorrent and use github mining tools. Our sampling strategy was to find 30 repositories that contain as close as possible to 15 non-merged and 15 merged pull requests in the TravisTorrent data set. We then use the Github API to mine the repositories and compare how test density and assert density look before the PR and after the PR.
 
-An example of how we might evaluate repositories is detailed below: 
+## Replication Instructions: 
 
-| PR has tests  | Number of added tests | Contributed test coverage | Merge status |
-| ------------- | ---------------- | --------------- | ------------- |
-|       T       |        3         |        50%      |       T       |
-|       F       |        5         |        20%      |       F       |
+### Libraries
 
-## Related works:
-1. The study conducted discusses the challenges of having stable code before releases and the limited resources available to properly integrate code. This relates to one of our attributes of production ready PRs versus regular PRs.
+#### Python3
 
-2. The paper looks into the importance of testing in CI despite the number of build failures resulting from testing. This helps to give insight on test failures and how these failures are combatted over time in the next build. Some ways these failures could be addressed may be an increase in test cases or even fixing a bug caught.
-
-3. This paper outlined how the TravisTorrent dataset is being built. It analyzed builds from GitHub and Travis-CI to synthesis Travis-CI meta data, project data and analysis on build logs.
-
-4. The two main research questions in the paper are: 1: How is the productivity of teams affected by CI 2: What is the effect of CI on software quality. This is similar to our project and can give us insight on what metrics can be used to evaluate software quality for successful release cycles.
-
-## Future insights:
-Insights obtained from this project can help determine an effect on number of tests in a build and the number of successful build merges and successful releases. This can give suggestions on best testing methodologies to adopt in order to improve overall releases. 
-
-
-## References
-
-Holck, J., & Jørgensen, N. (2003). Continuous Integration and Quality Assurance: a case study of two open source projects. Australasian Journal of Information Systems, 11(1). doi:http://dx.doi.org/10.3127/ajis.v11i1.145
-
-Beller, M., Gousios, G., & Zaidman, A. (2016). Oops, my tests broke the build: An analysis of Travis CI builds with GitHub. doi:10.7287/peerj.preprints.1984
-
-Beller, M., Gousios, G., & Zaidman, A. (2017). TravisTorrent: Synthesizing Travis CI and GitHub for Full-Stack Research on Continuous Integration. In 2017 IEEE/ACM 14th International Conference on Mining Software Repositories (MSR). IEEE. https://doi.org/10.1109/msr.2017.24
-
-Vasilescu, B., Yu, Y., Wang, H., Devanbu, P., & Filkov, V. (2015). Quality and productivity outcomes relating to continuous integration in GitHub. In Proceedings of the 2015 10th Joint Meeting on Foundations of Software Engineering - ESEC/FSE 2015. ACM Press. https://doi.org/10.1145/2786805.2786850
-
-
-## Libraries
-
-### PyDriller
-
-Installation instructions can be found here: https://github.com/ishepard/pydriller#install  
+All of our required libraries for python can be installed using 
 ```
-pip3 install pydriller
+pip3 install -r requirements.txt
 ```
 
+#### TravisTorrent
+Using sqlite3 to query this, download our csv from here: https://travistorrent.testroots.org/page_access/
 
-### TravisTorrent
-Using sqlite3 to query this, download the latest csv from here: https://travistorrent.testroots.org/page_access/
-
-Import to sqlite3 using:  
+This csv can be imported to sqlite3 using:  
 ```
 sqlite3 travis.db
 .mode csv
@@ -60,4 +32,30 @@ sqlite3 travis.db
 ```
 Now there will be a a table called travis in your new travis.db containing all the data; takes about 5-10 minutes to complete the import.  
 
+### Instructions 
 
+### Raw Data
+You *must* have the results/test_density_export folder to collect the exported data.
+
+Run
+```
+python3 findMergeCommit.py
+```
+This will take several hours to complete, it will generate in the `results/test_density_export` folder a unique csv file for each repository analyzed. This csv file will contain all of the pull request data of interest and will look something like this:
+
+*insert image here*
+
+### Scatterplots
+You *must* have the results/plots folder to collect the exported plots.
+
+Run
+```
+python3 scatterPlot.py 
+```
+There are three plots which will be generated in the results/plots folder;
+
+overall_scatter_plot.png: This plot shows all of our data, with Assert Density on the Y-Axis and Test Case Density on the X-Axis. It contains all 861 Pull requests and plots the *difference* in their respective x and y axis values from before the PR and the end of the PR.
+
+focused_overall_scatter_plot.png: This plot is similar to the one above and shows all of our data, with Assert Density on the Y-Axis and Test Case Density on the X-Axis, however it excludes some of the egregious outliers so that we can better see the distribution of data
+
+type3_scatter_plot.png: This plot shows the data for the 10 repositories we found to have *explicit* reference to a contribution policy that referenced tests as being necessary for PRs
