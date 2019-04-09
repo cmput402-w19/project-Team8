@@ -25,10 +25,16 @@ sqlite3 travis.db
 Now there will be a a table called travis in your new travis.db containing all the data; takes about 5-10 minutes to complete the import.  
 
 ### Instructions 
+You *must* have the results/test_density_export folder to collect the exported data.
+
 Run
 ```
 python3 findMergeCommit.py
 ```
+This will take several hours to complete, it will generate in the `results/test_density_export` folder a unique csv file for each repository analyzed. This csv file will contain all of the pull request data of interest and will look something like this:
+
+
+
 
 ## Goal:
 The question this project aims to address is; **'Do number of tests correlate with more merges into production code'**
