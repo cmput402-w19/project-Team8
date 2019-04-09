@@ -8,7 +8,7 @@ red = "#DC143C"
 green = "#32CD32"
 colors = [green, red]
 
-def prep_csv_data(csv_files):
+def build_overall_scatterplot(csv_files, graph_title, save_flag, file_name):
     merged_prs_x = []
     unmerged_prs_x = []
     merged_prs_y = []
@@ -72,21 +72,27 @@ def prep_csv_data(csv_files):
     print(merged_counts_below, "merge commits in quad 3")
     print(unmerged_counts, "unmerged counts in quad 3\n")
     print(counter, "total rows")
+    print("unmerged PR % inside  quad 1: ", (unmerged_counts_above/len(unmerged_prs_x)))
+    print("merged PR in quad 1 %: ", (merged_counts / len(merged_prs_x)))
+    print("unmerged PR % inside  quad 3: ", (unmerged_counts/len(unmerged_prs_x)))
+    print("merged PR in quad 3: ", (merged_counts_below/len(merged_prs_x)))
+    
 
-
-    plt.title("Scatterplot of All PRs")
+    plt.title(graph_title)
     plt.plot(x, y, "-b")
     plt.plot(x2, y2, "-b")
 
     plt.xlabel("test case density diff")
     plt.ylabel("assert test case diff")
-    plt.savefig("./results/plots/overall_scatter_plot.png")
+    if(save_flag):
+        plt.savefig("./results/plots/"+file_name)
 
     plt.title("Focused Scatterplot of All PRs")
     plt.xlim(-5, 8)
     plt.ylim(-9, 13)
     # plt.show()
-    plt.savefig("./results/plots/focused_overall_scatter_plot.png")
+    if(save_flag):
+        plt.savefig("./results/plots/focused_"+file_name)
     plt.close()
     
 def scatter_plot_repo(csv_files):
@@ -138,7 +144,17 @@ def scatter_plot_repo(csv_files):
 def main():
     csv_path = "./results/test_density_export/"
     csv_files = []
+    type3_csv_files = ["jedis", "capybara", "adhearsion", "expertiza", "prawn","graphite", "blacklight", "geoserver", "omnibus", "shoulda-matchers"]
+
+
+    for i in range(len(type3_csv_files)):
+        type3_csv_files[i] = csv_path + type3_csv_files[i] + ".csv"
+        
+    build_overall_scatterplot(type3_csv_files, "Scatterplot of Type3 PRs", True, "type3_scatter_plot.png")
+
+    print("#####################################")
+    print("Overall of all 30 repos")
     for filename in  os.listdir(csv_path):
         csv_files.append(csv_path+filename)
-    prep_csv_data(csv_files)
+    build_overall_scatterplot(csv_files, "Scatterplot of All PRs", True, "overall_scatter_plot.png")
 main()
