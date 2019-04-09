@@ -2,6 +2,34 @@
 ## Members
 #### Matthew Chung, Hiu Fung Kevin Chang, Henry Truong
 
+## Replication Instructions: 
+
+### Libraries
+
+#### PyDriller
+
+Installation instructions can be found here: https://github.com/ishepard/pydriller#install  
+```
+pip3 install pydriller
+```
+
+#### TravisTorrent
+Using sqlite3 to query this, download our csv from here: https://travistorrent.testroots.org/page_access/
+
+This csv can be imported to sqlite3 using:  
+```
+sqlite3 travis.db
+.mode csv
+.import path/to/travisTorrent.csv travis
+```
+Now there will be a a table called travis in your new travis.db containing all the data; takes about 5-10 minutes to complete the import.  
+
+### Instructions 
+Run
+```
+python3 findMergeCommit.py
+```
+
 ## Goal:
 The question this project aims to address is; **'Do number of tests correlate with more merges into production code'**
 
@@ -26,38 +54,3 @@ An example of how we might evaluate repositories is detailed below:
 
 ## Future insights:
 Insights obtained from this project can help determine an effect on number of tests in a build and the number of successful build merges and successful releases. This can give suggestions on best testing methodologies to adopt in order to improve overall releases. 
-
-
-## References
-
-Holck, J., & Jørgensen, N. (2003). Continuous Integration and Quality Assurance: a case study of two open source projects. Australasian Journal of Information Systems, 11(1). doi:http://dx.doi.org/10.3127/ajis.v11i1.145
-
-Beller, M., Gousios, G., & Zaidman, A. (2016). Oops, my tests broke the build: An analysis of Travis CI builds with GitHub. doi:10.7287/peerj.preprints.1984
-
-Beller, M., Gousios, G., & Zaidman, A. (2017). TravisTorrent: Synthesizing Travis CI and GitHub for Full-Stack Research on Continuous Integration. In 2017 IEEE/ACM 14th International Conference on Mining Software Repositories (MSR). IEEE. https://doi.org/10.1109/msr.2017.24
-
-Vasilescu, B., Yu, Y., Wang, H., Devanbu, P., & Filkov, V. (2015). Quality and productivity outcomes relating to continuous integration in GitHub. In Proceedings of the 2015 10th Joint Meeting on Foundations of Software Engineering - ESEC/FSE 2015. ACM Press. https://doi.org/10.1145/2786805.2786850
-
-
-## Libraries
-
-### PyDriller
-
-Installation instructions can be found here: https://github.com/ishepard/pydriller#install  
-```
-pip3 install pydriller
-```
-
-
-### TravisTorrent
-Using sqlite3 to query this, download the latest csv from here: https://travistorrent.testroots.org/page_access/
-
-Import to sqlite3 using:  
-```
-sqlite3 travis.db
-.mode csv
-.import path/to/travisTorrent.csv travis
-```
-Now there will be a a table called travis in your new travis.db containing all the data; takes about 5-10 minutes to complete the import.  
-
-
