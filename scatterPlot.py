@@ -146,15 +146,22 @@ def main():
     csv_files = []
     type3_csv_files = ["jedis", "capybara", "adhearsion", "expertiza", "prawn","graphite", "blacklight", "geoserver", "omnibus", "shoulda-matchers"]
 
-
     for i in range(len(type3_csv_files)):
         type3_csv_files[i] = csv_path + type3_csv_files[i] + ".csv"
         
-    build_overall_scatterplot(type3_csv_files, "Scatterplot of Type3 PRs", True, "type3_scatter_plot.png")
+    build_overall_scatterplot(type3_csv_files, "PRs With Testing Contribution Policies", True, "contribution_policies_scatter_plot.png")
+
+    type12_csv_files = [] 
 
     print("#####################################")
     print("Overall of all 30 repos")
     for filename in  os.listdir(csv_path):
         csv_files.append(csv_path+filename)
+        if csv_path+filename not in type3_csv_files:
+            type12_csv_files.append(csv_path+filename)
     build_overall_scatterplot(csv_files, "Scatterplot of All PRs", True, "overall_scatter_plot.png")
+
+    print("######################################")
+    print("Overall of type 1 & 2 repos")
+    build_overall_scatterplot(type12_csv_files, "PRs Without Testing Contribution Policies", True, "no_contribution_policies_scatter_plot.png")
 main()
