@@ -34,7 +34,7 @@ Now there will be a a table called travis in your new travis.db containing all t
 
 ### Instructions 
 
-### Raw Data
+#### Raw Data
 You *must* have the results/test_density_export folder to collect the exported data.
 
 Run
@@ -45,7 +45,7 @@ This will take several hours to complete, it will generate in the `results/test_
 
 *insert image here*
 
-### Scatterplots
+#### Scatterplots
 You *must* have the results/plots folder to collect the exported plots.
 
 Run
