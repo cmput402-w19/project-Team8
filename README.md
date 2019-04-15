@@ -43,7 +43,7 @@ python3 findMergeCommit.py
 ```
 This will take several hours to complete, it will generate in the `results/test_density_export` folder a unique csv file for each repository analyzed. This csv file will contain all of the pull request data of interest and will look something like this:
 
-*insert image here*
+[Sample output file](https://github.com/cmput402-w19/project-Team8/blob/master/results/test_density_export/Singularity.csv)
 
 #### Scatterplots
 You *must* have the results/plots folder to collect the exported plots.
