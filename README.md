@@ -22,7 +22,7 @@ pip3 install -r requirements.txt
 ```
 
 #### TravisTorrent
-Using sqlite3 to query this, download our snapshot of the data csv from here: https://drive.google.com/open?id=149zmEOi9i4L340VfPXSYEEt8ZnybTTld 
+Using sqlite3 to query this, download our snapshot of the data csv from here (only ualberta accounts can access this): https://drive.google.com/open?id=149zmEOi9i4L340VfPXSYEEt8ZnybTTld 
 
 This csv is very large (3gb) thus it could not be included directly in the github repository. Using this csv is important to properly replicate the results of our research. This csv can be imported to sqlite3 using:  
 ```
