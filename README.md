@@ -22,9 +22,9 @@ pip3 install -r requirements.txt
 ```
 
 #### TravisTorrent
-Using sqlite3 to query this, download our csv from here: https://travistorrent.testroots.org/page_access/
+Using sqlite3 to query this, download our snapshot of the data csv from here: https://drive.google.com/open?id=149zmEOi9i4L340VfPXSYEEt8ZnybTTld 
 
-This csv can be imported to sqlite3 using:  
+This csv is very large (3gb) thus it could not be included directly in the github repository. Using this csv is important to properly replicate the results of our research. This csv can be imported to sqlite3 using:  
 ```
 sqlite3 travis.db
 .mode csv
